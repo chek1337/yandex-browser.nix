@@ -32,6 +32,24 @@ Use cachix cache for faster builds: https://app.cachix.org/cache/yandex-browser-
 
 Run `nix flake lock --update-input yandex-browser` before rebuild to get new versions and hashes.
 
+### Installing extensions
+
+Pass a list of Chrome Web Store extension IDs via the `extensions` parameter:
+
+```nix
+home.packages = [
+  (inputs.yandex-browser.packages.x86_64-linux.yandex-browser-stable.override {
+    extensions = [
+      "cjpalhdlnbpafiamejdnhcphjbkeiagm" # uBlock Origin
+      "dbepggeogbaibhgnhhndojpepiihcmeb" # Vimium
+    ];
+  })
+];
+```
+
+The extension IDs can be found in the Chrome Web Store URL:
+`https://chrome.google.com/webstore/detail/<name>/<id>`
+
 3. Using old nix:
 
 ```nix
