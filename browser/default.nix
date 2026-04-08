@@ -182,6 +182,14 @@ stdenv.mkDerivation {
 
     ln -sf ${codecs}/lib/libffmpeg.so $out/opt/yandex/${folderName}/libffmpeg.so
 
+    ${lib.optionalString (extensions != [ ]) ''
+      mkdir -p $out/opt/yandex/${folderName}/Extensions
+      ${lib.concatMapStrings (id: ''
+        echo '{"external_update_url":"https://clients2.google.com/service/update2/crx"}' \
+          > "$out/opt/yandex/${folderName}/Extensions/${id}.json"
+      '') extensions}
+    ''}
+
     exe=$out/opt/yandex/${folderName}/yandex_browser
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$exe"
     addDriverRunpath "$exe"
